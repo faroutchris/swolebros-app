@@ -30,6 +30,7 @@ enum WorkoutIcons {
   cycling,
   swimming,
   fighting,
+  dance,
   yoga,
   other,
   unknown
@@ -45,6 +46,7 @@ extension WorkoutIconsExtension on WorkoutIcons {
     WorkoutIcons.swimming: "🏊‍♀️",
     WorkoutIcons.fighting: "🥊",
     WorkoutIcons.yoga: "🧘‍♀️",
+    WorkoutIcons.dance: "💃",
     WorkoutIcons.other: "🛹",
     WorkoutIcons.unknown: "🫃🏻",
   };

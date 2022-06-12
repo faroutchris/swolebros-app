@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountSettings {
-  final bool isOnboarded;
+  final bool? isOnboarded;
 
   AccountSettings({required this.isOnboarded});
 
@@ -15,7 +15,7 @@ class AccountSettings {
 
   Map<String, dynamic> toJson() {
     return {
-      "isOnboarded": isOnboarded,
+      if (isOnboarded != null) "isOnboarded": isOnboarded,
     };
   }
 }

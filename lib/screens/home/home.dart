@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:swole_app/constants/routes.dart';
 import 'package:swole_app/providers/auth_service_provider.dart';
@@ -11,7 +13,7 @@ import 'package:swole_app/services/auth_service.dart';
 import 'package:swole_app/screens/home/home_lang.dart';
 import 'package:swole_app/utils/lang.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   void addWorkout(BuildContext context) {
@@ -29,6 +31,12 @@ class HomeScreen extends ConsumerWidget {
     HomeController homeController = ref.read(homeControllerProvider.notifier);
     AsyncValue<HomeState> state = ref.watch(homeControllerProvider);
 
+    useEffect(() {
+      accountSettingsService.initializeAccountSettings();
+
+      return null;
+    }, [authService.user]);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -38,7 +46,6 @@ class HomeScreen extends ConsumerWidget {
             initialData: authService.user,
             stream: authService.userStream,
             builder: (context, snapshot) {
-              accountSettingsService.initializeAccountSettings();
               if ((state.value?.isSigningIn ?? false) ||
                   (state.value?.isSigningOut ?? false)) {
                 return const Center(
@@ -94,12 +101,11 @@ class HomeScreen extends ConsumerWidget {
                 );
               } else {
                 // Sign in page / onboarding
-
                 return Center(
                   child: CupertinoButton(
                       color: CupertinoColors.black,
                       child: Text(lang.mapFrom(HomeScreenLangKeys.signIn)),
-                      onPressed: homeController.signIn),
+                      onPressed: () => homeController.signIn(context)),
                 );
               }
             },

@@ -13,7 +13,8 @@ enum HomeScreenLangKeys {
 
 var homeScreenLang = {
   HomeScreenLangKeys.addWorkout: "Add workout 💪",
-  HomeScreenLangKeys.loginError: "We had trouble signing in to your account",
+  HomeScreenLangKeys.loginError:
+      "We had trouble signing you in.\nTry again later or contact support.",
   HomeScreenLangKeys.signIn: "Sign in",
   HomeScreenLangKeys.signOut: "Sign out",
   HomeScreenLangKeys.signOutSnack: "You've signed out of your account",

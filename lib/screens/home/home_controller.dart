@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:swole_app/providers/auth_service_provider.dart';
@@ -48,11 +49,19 @@ class HomeController extends StateNotifier<AsyncValue<HomeState>> {
     });
   }
 
-  void signIn() async {
+  void signIn(BuildContext context) async {
     state = AsyncData(HomeState(isSigningIn: true));
 
-    await authService.signIn().then((_) {
+    try {
+      await authService.signIn();
       state = AsyncData(HomeState());
-    });
+    } on FirebaseAuthException catch (_) {
+      state = AsyncData(HomeState());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(lang.mapFrom(HomeScreenLangKeys.loginError)),
+        ),
+      );
+    }
   }
 }

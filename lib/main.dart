@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +11,27 @@ import 'package:swole_app/screens/add_workout/add_workout.dart';
 import 'package:swole_app/screens/home/home.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // https://docs.flutter.dev/testing/errors
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  runApp(const ProviderScope(child: MyApp()));
+    if (kReleaseMode) {
+      ErrorWidget.builder = (FlutterErrorDetails details) =>
+          const Center(child: Text("Something went terribly wrong"));
+    }
+
+    return runApp(const ProviderScope(child: MyApp()));
+  }, (Object error, StackTrace stack) {
+    if (kDebugMode) {
+      print("Send error to backend");
+      print(error);
+      print(stack);
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {

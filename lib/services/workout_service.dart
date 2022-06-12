@@ -11,11 +11,15 @@ class WorkoutService {
 
   Future<List<Workout>?> getAll() async {
     if (authService.user?.uid != null) {
-      var ref2 = await workoutCollection
-          .where("user", isEqualTo: authService.user?.uid)
-          .get();
+      try {
+        var ref = await workoutCollection
+            .where("user", isEqualTo: authService.user?.uid)
+            .get();
 
-      return ref2.docs.map((e) => e.data()).toList();
+        return ref.docs.map((e) => e.data()).toList();
+      } catch (e) {
+        // No handling
+      }
     }
     return null;
   }

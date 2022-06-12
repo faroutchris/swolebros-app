@@ -22,19 +22,31 @@ class AccountSettingsService {
 
   Future<void> initializeAccountSettings() async {
     if (authService.user?.uid != null) {
-      await collection
-          .doc(authService.user?.uid)
-          .set(AccountSettings(isOnboarded: false));
+      var doc = collection.doc(authService.user?.uid);
+      try {
+        var ref = await doc.get();
+        // Always returns an AccountSetting model even when the document does not exist
+        if (ref.data()?.isOnboarded == null) {
+          doc.set(AccountSettings(isOnboarded: false));
+        }
+      } catch (e) {
+        // no handling
+      }
     }
   }
 
   void toggleOnboarding() async {
     var doc = collection.doc(authService.user?.uid);
-    doc.get().then((value) {
-      var data = value.data();
-      if (data != null) {
-        doc.set(AccountSettings(isOnboarded: !data.isOnboarded));
+    try {
+      var ref = await doc.get();
+      var data = ref.data();
+      if (data?.isOnboarded == false || data?.isOnboarded == null) {
+        doc.set(AccountSettings(isOnboarded: true));
+      } else {
+        doc.set(AccountSettings(isOnboarded: false));
       }
-    });
+    } catch (e) {
+      // no handling
+    }
   }
 }
