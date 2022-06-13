@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -78,45 +77,47 @@ class WorkoutList extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: List.from(
-        data!.map(
-          (workout) => Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: FractionallySizedBox(
-                widthFactor: 1.0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                        workout.dateCreated?.toDate().toLocal().toString() ??
-                            "",
-                        style: ThemeData.light().textTheme.caption),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              WorkoutIconHelper.mapFrom(workout.type ?? ""),
-                              style: const TextStyle(fontSize: 32),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: Text(
-                                workout.type ?? "",
+    return Expanded(
+      child: ListView(
+        children: List.from(
+          data!.map(
+            (workout) => Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FractionallySizedBox(
+                  widthFactor: 1.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          workout.dateCreated?.toDate().toLocal().toString() ??
+                              "",
+                          style: ThemeData.light().textTheme.caption),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                WorkoutIconHelper.mapFrom(workout.type ?? ""),
+                                style: const TextStyle(fontSize: 32),
                               ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          workout.time.toString() + " min",
-                          style: ThemeData.light().textTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                  ],
+                              Padding(
+                                padding: const EdgeInsets.only(left: 12),
+                                child: Text(
+                                  workout.type ?? "",
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            workout.time.toString() + " min",
+                            style: ThemeData.light().textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

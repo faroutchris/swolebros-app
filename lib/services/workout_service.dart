@@ -27,7 +27,7 @@ class WorkoutService {
     if (_authService.user?.uid != null) {
       var workout = Workout(
           user: _authService.user?.uid,
-          type: "Fighting",
+          type: "Gym",
           time: 20,
           dateCreated: Timestamp.fromDate(DateTime.now()));
 

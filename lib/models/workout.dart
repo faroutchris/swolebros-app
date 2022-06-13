@@ -17,6 +17,7 @@ class Workout {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
+
     return Workout(
       user: data?["user"],
       type: data?["type"],
