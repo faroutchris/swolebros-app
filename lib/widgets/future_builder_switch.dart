@@ -31,12 +31,13 @@ class FutureBuilderSwitch extends StatelessWidget {
       return data!;
     } else if (snapshot != null &&
         snapshot?.connectionState == ConnectionState.done &&
-        snapshot?.hasData == false) {
-      return noData!;
-    } else if (snapshot != null &&
-        snapshot?.connectionState == ConnectionState.done &&
         snapshot?.hasError == true) {
       return error!;
+    } else if (snapshot != null &&
+        snapshot?.connectionState == ConnectionState.done &&
+        snapshot?.hasData == false &&
+        snapshot?.hasError == false) {
+      return noData!;
     } else if (snapshot != null &&
         snapshot?.connectionState == ConnectionState.waiting) {
       return loading!;

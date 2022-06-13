@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Workout {
+  final String? user;
   final String? type;
   final int? time;
   final Timestamp? dateCreated;
 
-  Workout({required this.type, required this.time, required this.dateCreated});
+  Workout(
+      {required this.user,
+      required this.type,
+      required this.time,
+      required this.dateCreated});
 
   factory Workout.fromJson(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -13,6 +18,7 @@ class Workout {
   ) {
     final data = snapshot.data();
     return Workout(
+      user: data?["user"],
       type: data?["type"],
       time: data?["time"],
       dateCreated: data?["date_created"],
@@ -21,9 +27,10 @@ class Workout {
 
   Map<String, dynamic> toJson() {
     return {
+      if (user != null) "user": user,
       if (type != null) "type": type,
       if (time != null) "time": time,
-      if (dateCreated != null) "date_created": dateCreated?.toString(),
+      if (dateCreated != null) "date_created": dateCreated?.toDate(),
     };
   }
 }

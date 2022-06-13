@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +13,10 @@ class AddWorkoutScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     WorkoutService workoutService = ref.read(workoutServiceProvider);
+
+    void onPressed() {
+      workoutService.create();
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -31,14 +36,14 @@ class AddWorkoutScreen extends ConsumerWidget {
                     ),
                     noData: const Center(
                       child: Icon(
-                        CupertinoIcons.wifi_slash,
+                        CupertinoIcons.xmark_circle_fill,
                         size: 64.0,
                         color: CupertinoColors.destructiveRed,
                       ),
                     ),
                     error: const Center(
                       child: Icon(
-                        CupertinoIcons.wifi_slash,
+                        CupertinoIcons.xmark_circle_fill,
                         size: 64.0,
                         color: CupertinoColors.destructiveRed,
                       ),
@@ -46,6 +51,7 @@ class AddWorkoutScreen extends ConsumerWidget {
                   );
                 },
               ),
+              CupertinoButton(child: const Text("Add"), onPressed: onPressed)
             ],
           ),
         ),
@@ -65,6 +71,13 @@ class WorkoutList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var data = snapshot.data;
+
+    if (data != null && data.isEmpty) {
+      return const Center(
+        child: Text("No data"),
+      );
+    }
+
     return Column(
       children: List.from(
         data!.map(
