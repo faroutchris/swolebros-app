@@ -18,7 +18,7 @@ class WorkoutService {
 
         return ref.docs.map((e) => e.data()).toList();
       } catch (e) {
-        // No handling
+        rethrow;
       }
     }
     return null;

@@ -3,21 +3,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Workout {
   final String? type;
   final int? time;
+  final Timestamp? dateCreated;
 
-  Workout({required this.type, required this.time});
+  Workout({required this.type, required this.time, required this.dateCreated});
 
   factory Workout.fromJson(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return Workout(type: data?["type"], time: data?["time"]);
+    return Workout(
+      type: data?["type"],
+      time: data?["time"],
+      dateCreated: data?["date_created"],
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
       if (type != null) "type": type,
       if (time != null) "time": time,
+      if (dateCreated != null) "date_created": dateCreated?.toString(),
     };
   }
 }
@@ -61,6 +67,22 @@ class WorkoutIconHelper {
         return WorkoutIcons.running.value;
       case "Gym":
         return WorkoutIcons.gym.value;
+      case "Walking":
+        return WorkoutIcons.walking.value;
+      case "Team sports":
+        return WorkoutIcons.teamsports.value;
+      case "Cycling":
+        return WorkoutIcons.cycling.value;
+      case "Swimming":
+        return WorkoutIcons.cycling.value;
+      case "Fighting":
+        return WorkoutIcons.fighting.value;
+      case "Yoga":
+        return WorkoutIcons.yoga.value;
+      case "Dance":
+        return WorkoutIcons.dance.value;
+      case "Other":
+        return WorkoutIcons.other.value;
       default:
         return WorkoutIcons.unknown.value;
     }

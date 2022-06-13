@@ -68,27 +68,41 @@ class WorkoutList extends StatelessWidget {
     return Column(
       children: List.from(
         data!.map(
-          (s) => Card(
+          (workout) => Card(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: FractionallySizedBox(
                 widthFactor: 1.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    Text(
+                        workout.dateCreated?.toDate().toLocal().toString() ??
+                            "",
+                        style: ThemeData.light().textTheme.caption),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          WorkoutIconHelper.mapFrom(s.type ?? ""),
-                          style: const TextStyle(fontSize: 24),
+                        Row(
+                          children: [
+                            Text(
+                              WorkoutIconHelper.mapFrom(workout.type ?? ""),
+                              style: const TextStyle(fontSize: 32),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Text(
+                                workout.type ?? "",
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: Text(s.type ?? ""),
+                        Text(
+                          workout.time.toString() + " min",
+                          style: ThemeData.light().textTheme.titleLarge,
                         ),
                       ],
                     ),
-                    Text(s.time.toString() + " min"),
                   ],
                 ),
               ),
