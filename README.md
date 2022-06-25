@@ -49,6 +49,10 @@ Install packages for flutter
 
 `flutter pub get`
 
+Install IOS deps
+
+`cd ios && pod install`
+
 Install firebase functions packages
 
 `cd functions && npm install`

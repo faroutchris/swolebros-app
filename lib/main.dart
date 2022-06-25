@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -18,7 +19,7 @@ Future<void> _connectToFirebaseEmulator() async {
   final localhost = Platform.isAndroid ? '10.0.2.2' : 'localhost';
 
   FirebaseFirestore.instance.useFirestoreEmulator(localhost, 8080);
-  await FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
+  FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
 }
 
 void main() async {
@@ -30,8 +31,7 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    // Change to flavour based setup
-    // await _connectToFirebaseEmulator();
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
@@ -45,16 +45,27 @@ void main() async {
 
     return runApp(const ProviderScope(child: MyApp()));
   }, (Object error, StackTrace stack) {
-    if (kDebugMode) {
-      print("Send error to backend");
-      print(error);
-      print(stack);
-    }
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  initState() {
+    // TODO: use flavors to decide Firebase instances
+    if (kDebugMode) {
+      _connectToFirebaseEmulator();
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
