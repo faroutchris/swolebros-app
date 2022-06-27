@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
+import 'package:swole_app/flavor_config.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +19,12 @@ Future<void> _connectToFirebaseEmulator() async {
   final localhost = Platform.isAndroid ? '10.0.2.2' : 'localhost';
 
   FirebaseFirestore.instance.useFirestoreEmulator(localhost, 8080);
-  FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
+  await FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
 }
 
 void main() async {
+  Flavor.setEnvironment(Environment.dev);
+
   // https://docs.flutter.dev/testing/errors
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -59,8 +61,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   initState() {
-    // TODO: use flavors to decide Firebase instances
-    if (kDebugMode) {
+    if (Flavor.current == Environment.dev) {
       _connectToFirebaseEmulator();
     }
 

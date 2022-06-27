@@ -1,5 +1,5 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
 
-bundle_suffix=.prod
-app_display_name=Swolebros ProdDebug
+bundle_suffix=.staging
+app_display_name=Swolebros Staging

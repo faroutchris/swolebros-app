@@ -73,7 +73,9 @@ Start emulator services
 
 ### 2: Run app
 
-`flutter run -d <platform>`
+`flutter run -d <deviceId> --flavor <prod/staging/dev> -t <entryFile>`
+
+Or use the launch configuration in VSCode
 
 # Build & distribute
 
