@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:swole_app/constants/routes.dart';
+import 'package:swole_app/flavor_config.dart';
 import 'package:swole_app/providers/auth_service_provider.dart';
 import 'package:swole_app/providers/firestore_services_provider.dart';
 import 'package:swole_app/screens/home/account_settings_button.dart';
@@ -83,6 +84,8 @@ class HomeScreen extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Spacer(),
+                    Text(Flavor.name),
                     const Spacer(),
                     CupertinoButton(
                         color: CupertinoColors.black,

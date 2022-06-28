@@ -40,7 +40,6 @@ Enable the following emulators
 - Authentication Emulator
 - Functions Emulator
 - Firestore Emulator
-- Pub/Sub Emulator,
 - Storage Emulator
 
 ### 4: Install packages
@@ -73,7 +72,9 @@ Start emulator services
 
 ### 2: Run app
 
-`flutter run -d <platform>`
+`flutter run -d <deviceId> --flavor <prod/staging/dev> -t <entryFile>`
+
+Or use the launch configuration in VSCode
 
 # Build & distribute
 
