@@ -40,7 +40,6 @@ Enable the following emulators
 - Authentication Emulator
 - Functions Emulator
 - Firestore Emulator
-- Pub/Sub Emulator,
 - Storage Emulator
 
 ### 4: Install packages

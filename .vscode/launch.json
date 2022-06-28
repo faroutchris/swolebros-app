@@ -9,6 +9,7 @@
             "name": "PROD swolebros-app",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_prod.dart",
             "args": [
                 "--flavor",
                 "prod"
@@ -18,6 +19,7 @@
             "name": "PROD swolebros-app (profile mode)",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_prod.dart",
             "flutterMode": "profile",
             "args": [
                 "--flavor",
@@ -28,6 +30,7 @@
             "name": "PROD swolebros-app (release mode)",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_prod.dart",
             "flutterMode": "release",
             "args": [
                 "--flavor",
@@ -38,6 +41,7 @@
             "name": "DEV swolebros-app",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_dev.dart",
             "args": [
                 "--flavor",
                 "dev"
@@ -47,6 +51,7 @@
             "name": "DEV swolebros-app (profile mode)",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_dev.dart",
             "flutterMode": "profile",
             "args": [
                 "--flavor",
@@ -57,6 +62,7 @@
             "name": "DEV swolebros-app (release mode)",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_dev.dart",
             "flutterMode": "release",
             "args": [
                 "--flavor",
@@ -67,6 +73,7 @@
             "name": "STAGING swolebros-app",
             "request": "launch",
             "type": "dart",
+            "program":  "lib/main_staging.dart",
             "args": [
                 "--flavor",
                 "staging"
@@ -76,6 +83,7 @@
             "name": "STAGING swolebros-app (profile mode)",
             "request": "launch",
             "type": "dart",
+            "program":  "lib/main_staging.dart",
             "flutterMode": "profile",
             "args": [
                 "--flavor",
@@ -86,6 +94,7 @@
             "name": "STAGING swolebros-app (release mode)",
             "request": "launch",
             "type": "dart",
+            "program":  "lib/main_staging.dart",
             "flutterMode": "release",
             "args": [
                 "--flavor",
