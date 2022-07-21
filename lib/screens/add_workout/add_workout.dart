@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:swole_app/models/workout.dart';
 import 'package:swole_app/providers/firestore_services_provider.dart';
 import 'package:swole_app/services/workout_service.dart';
-import 'package:swole_app/widgets/future_builder_switch.dart';
 
 class AddWorkoutScreen extends ConsumerWidget {
   const AddWorkoutScreen({Key? key}) : super(key: key);
@@ -24,31 +24,46 @@ class AddWorkoutScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              FutureBuilder<List<Workout>?>(
-                future: workoutService.getAll(),
-                builder: (context, snapshot) {
-                  return FutureBuilderSwitch(
-                    snapshot: snapshot,
-                    data: WorkoutList(snapshot: snapshot),
-                    loading: const Center(
+              StreamBuilder<QuerySnapshot<Workout>>(
+                builder: ((context, snapshot) {
+                  // loading
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
                       child: CircularProgressIndicator(),
-                    ),
-                    noData: const Center(
+                    );
+                  }
+
+                  // no data
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData == false &&
+                      snapshot.hasError == false) {
+                    return const Center(
+                        child: Icon(
+                      CupertinoIcons.nosign,
+                      size: 64.0,
+                      color: CupertinoColors.destructiveRed,
+                    ));
+                  }
+
+                  // data
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData == true) {
+                    return WorkoutList(snapshot: snapshot);
+                  }
+
+                  // error
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasError == true) {
+                    return const Center(
                       child: Icon(
                         CupertinoIcons.xmark_circle_fill,
                         size: 64.0,
                         color: CupertinoColors.destructiveRed,
                       ),
-                    ),
-                    error: const Center(
-                      child: Icon(
-                        CupertinoIcons.xmark_circle_fill,
-                        size: 64.0,
-                        color: CupertinoColors.destructiveRed,
-                      ),
-                    ),
-                  );
-                },
+                    );
+                  }
+                }),
+                stream: workoutService.$userWorkouts,
               ),
               CupertinoButton(child: const Text("Add"), onPressed: onPressed)
             ],
@@ -65,13 +80,13 @@ class WorkoutList extends StatelessWidget {
     required this.snapshot,
   }) : super(key: key);
 
-  final AsyncSnapshot<List<Workout>?> snapshot;
+  final AsyncSnapshot<QuerySnapshot<Workout>?> snapshot;
 
   @override
   Widget build(BuildContext context) {
     var data = snapshot.data;
 
-    if (data != null && data.isEmpty) {
+    if (data != null && data.size == 0) {
       return const Center(
         child: Text("No data"),
       );
@@ -80,7 +95,7 @@ class WorkoutList extends StatelessWidget {
     return Expanded(
       child: ListView(
         children: List.from(
-          data!.map(
+          data!.docs.map(
             (workout) => Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -90,7 +105,12 @@ class WorkoutList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                          workout.dateCreated?.toDate().toLocal().toString() ??
+                          workout
+                                  .data()
+                                  .dateCreated
+                                  ?.toDate()
+                                  .toLocal()
+                                  .toString() ??
                               "",
                           style: ThemeData.light().textTheme.caption),
                       Row(
@@ -99,19 +119,20 @@ class WorkoutList extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                WorkoutIconHelper.mapFrom(workout.type ?? ""),
+                                WorkoutIconHelper.mapFrom(
+                                    workout.data().type ?? ""),
                                 style: const TextStyle(fontSize: 32),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Text(
-                                  workout.type ?? "",
+                                  workout.data().type ?? "",
                                 ),
                               ),
                             ],
                           ),
                           Text(
-                            workout.time.toString() + " min",
+                            workout.data().time.toString() + " min",
                             style: ThemeData.light().textTheme.titleLarge,
                           ),
                         ],

@@ -9,6 +9,18 @@ class WorkoutService {
 
   WorkoutService(this._collection, this._authService);
 
+  Stream<QuerySnapshot<Workout>> get $userWorkouts {
+    if (_authService.user?.uid != null) {
+      return _collection
+          .where("user", isEqualTo: _authService.user?.uid)
+          .orderBy("date_created", descending: true)
+          .limit(20)
+          .snapshots();
+    } else {
+      return const Stream.empty();
+    }
+  }
+
   // TODO: limit by date
   Future<List<Workout>?> getAll() async {
     if (_authService.user?.uid != null) {

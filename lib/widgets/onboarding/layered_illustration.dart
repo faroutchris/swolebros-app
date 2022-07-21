@@ -36,10 +36,12 @@ class LayeredIllustration extends ConsumerWidget {
     double opacity = 1;
 
     if (fadeOut) {
-      opacity = interpolate(pageOffset,
-          input: [(index - 1) * width, index * width, (index + 1) * width],
-          output: [0, 1, 0],
-          extrapolation: Extrapolation.clamp);
+      opacity = interpolate(
+        pageOffset,
+        input: [(index - 1) * width, index * width, (index + 1) * width],
+        output: [0, 1, 0],
+        extrapolation: Extrapolation.clamp,
+      );
     }
 
     return Opacity(
