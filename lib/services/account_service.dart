@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:swole_app/models/account_settings.dart';
+import 'package:swole_app/models/account.dart';
 import 'package:swole_app/services/auth_service.dart';
 
-class AccountSettingsService {
-  final CollectionReference<AccountSettings> collection;
+class AccountService {
+  final CollectionReference<Account> collection;
 
   final AuthService authService;
 
-  AccountSettingsService(this.collection, this.authService);
+  AccountService(this.collection, this.authService);
 
-  Stream<AccountSettings?> get $accountSettings {
+  Stream<Account?> get $account {
     if (authService.user?.uid != null) {
       return collection
           .doc(authService.user?.uid)
@@ -21,14 +21,14 @@ class AccountSettingsService {
     }
   }
 
-  Future<void> initializeAccountSettings() async {
+  Future<void> initializeAccount() async {
     if (authService.user?.uid != null) {
       var doc = collection.doc(authService.user?.uid);
       try {
         var ref = await doc.get();
         // Always returns an AccountSetting model even when the document does not exist
         if (ref.data()?.isOnboarded == null) {
-          doc.set(AccountSettings(isOnboarded: false, team: null));
+          doc.set(Account(isOnboarded: false, team: null));
         }
       } catch (e, stack) {
         FirebaseCrashlytics.instance.recordError(e, stack);

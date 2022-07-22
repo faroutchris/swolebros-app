@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:swole_app/models/account_settings.dart';
+import 'package:swole_app/models/account.dart';
 import 'package:swole_app/screens/home/home_lang.dart';
-import 'package:swole_app/services/account_settings_service.dart';
+import 'package:swole_app/services/account_service.dart';
 import 'package:swole_app/services/teams_service.dart';
 import 'package:swole_app/utils/lang.dart';
 
@@ -14,15 +14,15 @@ class AccountSettingsButton extends ConsumerWidget {
     required this.teamsService,
   }) : super(key: key);
 
-  final AccountSettingsService accountSettingsService;
+  final AccountService accountSettingsService;
   final TeamsService teamsService;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Lang<HomeScreenLangKeys> lang = ref.read(homeScreenLangProvider);
 
-    return StreamBuilder<AccountSettings?>(
-        stream: accountSettingsService.$accountSettings,
+    return StreamBuilder<Account?>(
+        stream: accountSettingsService.$account,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
@@ -30,9 +30,8 @@ class AccountSettingsButton extends ConsumerWidget {
           if (snapshot.hasData) {
             var id = snapshot.data?.team?.id;
             if (id != null) {
-              var test = teamsService
-                  .getById(id)
-                  .then((value) => print(value.data()?.memberships.toString()));
+              var test =
+                  teamsService.getById(id).then((value) => print(value.data()));
             }
             return CupertinoButton(
                 color: CupertinoColors.black,

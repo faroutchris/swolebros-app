@@ -9,7 +9,7 @@ import 'package:swole_app/providers/auth_service_provider.dart';
 import 'package:swole_app/providers/firestore_services_provider.dart';
 import 'package:swole_app/screens/home/account_settings_button.dart';
 import 'package:swole_app/screens/home/home_controller.dart';
-import 'package:swole_app/services/account_settings_service.dart';
+import 'package:swole_app/services/account_service.dart';
 import 'package:swole_app/services/auth_service.dart';
 import 'package:swole_app/screens/home/home_lang.dart';
 import 'package:swole_app/services/teams_service.dart';
@@ -29,15 +29,14 @@ class HomeScreen extends HookConsumerWidget {
     Lang<HomeScreenLangKeys> lang = ref.read(homeScreenLangProvider);
 
     AuthService authService = ref.read(authServiceProvider);
-    AccountSettingsService accountSettingsService =
-        ref.read(accountSettingsServiceProvider);
+    AccountService accountSettingsService = ref.read(accountServiceProvider);
     TeamsService teamsService = ref.read(teamsServiceProvider);
 
     HomeController homeController = ref.read(homeControllerProvider.notifier);
     AsyncValue<HomeState> state = ref.watch(homeControllerProvider);
 
     useEffect(() {
-      accountSettingsService.initializeAccountSettings();
+      accountSettingsService.initializeAccount();
 
       return null;
     }, [authService.user]);

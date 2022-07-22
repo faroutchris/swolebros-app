@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:swole_app/models/account_settings.dart';
+import 'package:swole_app/models/account.dart';
 import 'package:swole_app/models/team.dart';
 import 'package:swole_app/models/workout.dart';
 import 'package:swole_app/providers/auth_service_provider.dart';
-import 'package:swole_app/services/account_settings_service.dart';
+import 'package:swole_app/services/account_service.dart';
 import 'package:swole_app/services/teams_service.dart';
 import 'package:swole_app/services/workout_service.dart';
 
@@ -15,13 +15,13 @@ final firestoreProvider =
 final crashlyticsProvider =
     Provider<FirebaseCrashlytics>((_ref) => FirebaseCrashlytics.instance);
 
-final accountSettingsServiceProvider = Provider<AccountSettingsService>((ref) {
+final accountServiceProvider = Provider<AccountService>((ref) {
   var firestore = ref.read(firestoreProvider);
 
-  return AccountSettingsService(
+  return AccountService(
     firestore.collection('accountsettings').withConverter(
-        fromFirestore: AccountSettings.fromJson,
-        toFirestore: (AccountSettings _acc, _) => _acc.toJson()),
+        fromFirestore: Account.fromJson,
+        toFirestore: (Account _acc, _) => _acc.toJson()),
     ref.read(authServiceProvider),
   );
 });

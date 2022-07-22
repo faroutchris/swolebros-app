@@ -1,18 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AccountSettings {
+class Account {
   final bool? isOnboarded;
   final DocumentReference<Map<String, dynamic>>? team;
 
-  AccountSettings({required this.isOnboarded, this.team});
+  Account({required this.isOnboarded, this.team});
 
-  factory AccountSettings.fromJson(
+  factory Account.fromJson(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return AccountSettings(
-        isOnboarded: data?["isOnboarded"], team: data?["team"]);
+    return Account(isOnboarded: data?["isOnboarded"], team: data?["team"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -22,11 +21,11 @@ class AccountSettings {
     };
   }
 
-  AccountSettings copyWith({
+  Account copyWith({
     bool? isOnboarded,
     DocumentReference<Map<String, dynamic>>? team,
   }) {
-    return AccountSettings(
+    return Account(
       isOnboarded: isOnboarded ?? this.isOnboarded,
       team: team ?? this.team,
     );
