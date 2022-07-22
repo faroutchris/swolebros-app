@@ -12,6 +12,7 @@ import 'package:swole_app/screens/home/home_controller.dart';
 import 'package:swole_app/services/account_settings_service.dart';
 import 'package:swole_app/services/auth_service.dart';
 import 'package:swole_app/screens/home/home_lang.dart';
+import 'package:swole_app/services/teams_service.dart';
 import 'package:swole_app/utils/lang.dart';
 
 import '../../custom_exception.dart';
@@ -30,6 +31,7 @@ class HomeScreen extends HookConsumerWidget {
     AuthService authService = ref.read(authServiceProvider);
     AccountSettingsService accountSettingsService =
         ref.read(accountSettingsServiceProvider);
+    TeamsService teamsService = ref.read(teamsServiceProvider);
 
     HomeController homeController = ref.read(homeControllerProvider.notifier);
     AsyncValue<HomeState> state = ref.watch(homeControllerProvider);
@@ -100,6 +102,7 @@ class HomeScreen extends HookConsumerWidget {
                     const Spacer(),
                     AccountSettingsButton(
                       accountSettingsService: accountSettingsService,
+                      teamsService: teamsService,
                     ),
                     const Spacer(),
                     TextButton(

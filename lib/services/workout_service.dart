@@ -21,20 +21,6 @@ class WorkoutService {
     }
   }
 
-  // TODO: limit by date
-  Future<List<Workout>?> getAll() async {
-    if (_authService.user?.uid != null) {
-      var ref = await _collection
-          .where("user", isEqualTo: _authService.user?.uid)
-          .orderBy("date_created", descending: true)
-          .get();
-
-      var list = ref.docs.map((e) => e.data()).toList();
-      return list;
-    }
-    return null;
-  }
-
   Future<void> create() async {
     if (_authService.user?.uid != null) {
       var workout = Workout(
