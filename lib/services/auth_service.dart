@@ -5,7 +5,7 @@ class AuthService {
 
   AuthService(this._firebaseAuth);
 
-  Stream<User?> get userStream => _firebaseAuth.authStateChanges();
+  Stream<User?> get $userStream => _firebaseAuth.authStateChanges();
 
   User? get user => _firebaseAuth.currentUser;
 

@@ -19,7 +19,7 @@ final accountServiceProvider = Provider<AccountService>((ref) {
   var firestore = ref.read(firestoreProvider);
 
   return AccountService(
-    firestore.collection('accountsettings').withConverter(
+    firestore.collection('account').withConverter(
         fromFirestore: Account.fromJson,
         toFirestore: (Account _acc, _) => _acc.toJson()),
     ref.read(authServiceProvider),
@@ -39,7 +39,17 @@ final workoutServiceProvider = Provider<WorkoutService>((ref) {
 
 final teamsServiceProvider = Provider<TeamsService>((ref) {
   var firestore = ref.read(firestoreProvider);
+  var accountService = ref.read(accountServiceProvider);
+  var authService = ref.read(authServiceProvider);
+  var crashlytics = ref.read(crashlyticsProvider);
 
-  return TeamsService(firestore.collection('teams').withConverter(
-      fromFirestore: Team.fromJson, toFirestore: (Team _t, _) => _t.toJson()));
+  return TeamsService(
+    firestore.collection('teams').withConverter(
+          fromFirestore: Team.fromJson,
+          toFirestore: (Team _t, _) => _t.toJson(),
+        ),
+    accountService,
+    authService,
+    crashlytics,
+  );
 });

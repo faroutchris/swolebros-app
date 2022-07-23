@@ -4,16 +4,16 @@ import 'package:swole_app/models/account.dart';
 import 'package:swole_app/services/auth_service.dart';
 
 class AccountService {
-  final CollectionReference<Account> collection;
+  final CollectionReference<Account> _collection;
 
-  final AuthService authService;
+  final AuthService _authService;
 
-  AccountService(this.collection, this.authService);
+  AccountService(this._collection, this._authService);
 
   Stream<Account?> get $account {
-    if (authService.user?.uid != null) {
-      return collection
-          .doc(authService.user?.uid)
+    if (_authService.user?.uid != null) {
+      return _collection
+          .doc(_authService.user?.uid)
           .snapshots()
           .map((doc) => doc.data());
     } else {
@@ -21,9 +21,19 @@ class AccountService {
     }
   }
 
+  Future<DocumentSnapshot<Account?>> getById(id) async {
+    try {
+      return _collection.doc(id).get();
+    } catch (e, stack) {
+      // todo, use provider
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      rethrow;
+    }
+  }
+
   Future<void> initializeAccount() async {
-    if (authService.user?.uid != null) {
-      var doc = collection.doc(authService.user?.uid);
+    if (_authService.user?.uid != null) {
+      var doc = _collection.doc(_authService.user?.uid);
       try {
         var ref = await doc.get();
         // Always returns an AccountSetting model even when the document does not exist
@@ -31,13 +41,14 @@ class AccountService {
           doc.set(Account(isOnboarded: false, team: null));
         }
       } catch (e, stack) {
+        // todo, use provider
         FirebaseCrashlytics.instance.recordError(e, stack);
       }
     }
   }
 
   void toggleOnboarding() async {
-    var doc = collection.doc(authService.user?.uid);
+    var doc = _collection.doc(_authService.user?.uid);
     try {
       var ref = await doc.get();
       var data = ref.data();
@@ -49,6 +60,7 @@ class AccountService {
         }
       }
     } catch (e, stack) {
+      // todo, use provider
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
   }

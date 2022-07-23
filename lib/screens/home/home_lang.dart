@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:swole_app/utils/lang.dart';
 
 enum HomeScreenLangKeys {
+  joinTeam,
   addWorkout,
   loginError,
   signIn,
@@ -12,6 +13,7 @@ enum HomeScreenLangKeys {
 }
 
 var homeScreenLang = {
+  HomeScreenLangKeys.joinTeam: "Join team",
   HomeScreenLangKeys.addWorkout: "Add workout 💪",
   HomeScreenLangKeys.loginError:
       "We had trouble signing you in.\nTry again later or contact support.",

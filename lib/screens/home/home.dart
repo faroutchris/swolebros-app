@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:swole_app/constants/routes.dart';
+import 'package:swole_app/custom_exception.dart';
 import 'package:swole_app/flavor_config.dart';
+import 'package:swole_app/models/team.dart';
 import 'package:swole_app/providers/auth_service_provider.dart';
 import 'package:swole_app/providers/firestore_services_provider.dart';
 import 'package:swole_app/screens/home/account_settings_button.dart';
@@ -15,13 +17,15 @@ import 'package:swole_app/screens/home/home_lang.dart';
 import 'package:swole_app/services/teams_service.dart';
 import 'package:swole_app/utils/lang.dart';
 
-import '../../custom_exception.dart';
-
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   void addWorkout(BuildContext context) {
     Navigator.of(context).pushNamed(AppRoute.addWorkout.value);
+  }
+
+  void joinTeam(BuildContext context) {
+    Navigator.of(context).pushNamed(AppRoute.joinTeam.value);
   }
 
   @override
@@ -48,7 +52,7 @@ class HomeScreen extends HookConsumerWidget {
           width: MediaQuery.of(context).size.width,
           child: StreamBuilder(
             initialData: authService.user,
-            stream: authService.userStream,
+            stream: authService.$userStream,
             builder: (context, snapshot) {
               if ((state.value?.isSigningIn ?? false) ||
                   (state.value?.isSigningOut ?? false)) {
@@ -87,6 +91,22 @@ class HomeScreen extends HookConsumerWidget {
                   children: [
                     const Spacer(),
                     Text(Flavor.name),
+                    const Spacer(),
+                    FutureBuilder<Team?>(
+                        future: teamsService.getCurrentTeam(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.connectionState ==
+                                  ConnectionState.done) {
+                            return Text(snapshot.data?.name ?? "");
+                          }
+                          return const CircularProgressIndicator();
+                        }),
+                    const Spacer(),
+                    CupertinoButton(
+                        color: CupertinoColors.black,
+                        child: Text(lang.mapFrom(HomeScreenLangKeys.joinTeam)),
+                        onPressed: () => joinTeam(context)),
                     const Spacer(),
                     CupertinoButton(
                         color: CupertinoColors.black,

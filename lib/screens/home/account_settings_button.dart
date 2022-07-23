@@ -28,11 +28,6 @@ class AccountSettingsButton extends ConsumerWidget {
             return const CircularProgressIndicator();
           }
           if (snapshot.hasData) {
-            var id = snapshot.data?.team?.id;
-            if (id != null) {
-              var test =
-                  teamsService.getById(id).then((value) => print(value.data()));
-            }
             return CupertinoButton(
                 color: CupertinoColors.black,
                 child: Text(lang.mapFrom((snapshot.data)?.isOnboarded == true

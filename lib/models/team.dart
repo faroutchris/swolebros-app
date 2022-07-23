@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Team {
   final String? name;
-  final Object? memberships;
+  final List<TeamMember>? members;
 
-  Team({this.memberships, this.name});
+  Team({this.members, this.name});
 
   factory Team.fromJson(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -13,42 +13,63 @@ class Team {
     final data = snapshot.data();
 
     return Team(
-        name: data?["name"],
-        memberships: Memberships(snapshot.reference.collection("memberships")));
+      name: data?["name"],
+      members: data != null && data.containsKey("members")
+          ? (data["members"] as List<dynamic>)
+              .map((member) => TeamMember.fromJson(member, options))
+              .toList()
+          : [],
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
       if (name != null) "name": name,
-      if (memberships != null) "memberships": memberships,
+      if (members != null) "members": members?.map((member) => member.toJson()),
     };
   }
 
   Team copyWith({
     String? name,
-    String? memberships,
+    List<TeamMember>? members,
   }) {
     return Team(
       name: name ?? this.name,
-      memberships: memberships ?? this.memberships,
+      members: members ?? this.members,
     );
   }
 }
 
-class Memberships {
-  late Iterable<Map<String, dynamic>> members;
+class TeamMember {
+  final DocumentReference<Map<String, dynamic>>? account;
+  final DocumentReference<Map<String, dynamic>>? role;
 
-  Memberships(CollectionReference<Map<String, dynamic>> cursor) {
-    cursor.get().then((value) {
-      members = value.docs.map((element) {
-        return element.data();
-      });
-    });
+  TeamMember({this.account, this.role});
+
+  factory TeamMember.fromJson(
+    data,
+    SnapshotOptions? options,
+  ) {
+    return TeamMember(
+      role: data?["role"],
+      account: data?["account"],
+    );
   }
 
-  @override
-  String toString() {
-    // TODO: implement toString
-    return members.toString();
+  Map<String, dynamic> toJson() {
+    return {
+      if (role != null) "role": role,
+      if (account != null) "account": account,
+    };
+  }
+
+  TeamMember copyWith({
+    DocumentReference<Map<String, dynamic>>? account,
+    DocumentReference<Map<String, dynamic>>? role,
+  }) {
+    return TeamMember(
+      role: role ?? this.role,
+      account: account ?? this.account,
+    );
   }
 }
