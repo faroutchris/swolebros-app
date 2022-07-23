@@ -34,7 +34,7 @@ class AddWorkoutScreen extends ConsumerWidget {
                   }
 
                   // no data
-                  if (snapshot.connectionState == ConnectionState.done &&
+                  if (snapshot.connectionState == ConnectionState.active &&
                       snapshot.hasData == false &&
                       snapshot.hasError == false) {
                     return const Center(
@@ -46,13 +46,13 @@ class AddWorkoutScreen extends ConsumerWidget {
                   }
 
                   // data
-                  if (snapshot.connectionState == ConnectionState.done &&
+                  if (snapshot.connectionState == ConnectionState.active &&
                       snapshot.hasData == true) {
                     return WorkoutList(snapshot: snapshot);
                   }
 
                   // error
-                  if (snapshot.connectionState == ConnectionState.done &&
+                  if (snapshot.connectionState == ConnectionState.active &&
                       snapshot.hasError == true) {
                     return const Center(
                       child: Icon(
@@ -62,6 +62,12 @@ class AddWorkoutScreen extends ConsumerWidget {
                       ),
                     );
                   }
+                  return const Center(
+                      child: Icon(
+                    CupertinoIcons.nosign,
+                    size: 64.0,
+                    color: CupertinoColors.destructiveRed,
+                  ));
                 }),
                 stream: workoutService.$userWorkouts,
               ),

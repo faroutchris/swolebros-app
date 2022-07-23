@@ -34,6 +34,14 @@ class Workout {
       if (dateCreated != null) "date_created": dateCreated?.toDate(),
     };
   }
+
+  copyWith({String? user, String? type, int? time, Timestamp? dateCreated}) {
+    return Workout(
+        user: user ?? this.user,
+        type: type ?? this.type,
+        time: time ?? this.time,
+        dateCreated: dateCreated ?? this.dateCreated);
+  }
 }
 
 enum WorkoutIcons {

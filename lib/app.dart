@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:swole_app/constants/routes.dart';
 import 'package:swole_app/screens/add_workout/add_workout.dart';
 import 'package:swole_app/screens/home/home.dart';
+import 'package:swole_app/screens/join_team/join_team.dart';
 
 Future<void> _connectToFirebaseEmulator() async {
   final localhost = Platform.isAndroid ? '10.0.2.2' : 'localhost';
@@ -41,6 +42,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         AppRoute.root.value: (context) => const HomeScreen(),
         AppRoute.addWorkout.value: (context) => const AddWorkoutScreen(),
+        AppRoute.joinTeam.value: (context) => const JoinTeamScreen(),
       },
     );
   }
