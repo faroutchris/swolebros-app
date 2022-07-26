@@ -10,6 +10,10 @@ class AccountService {
 
   AccountService(this._collection, this._authService);
 
+  CollectionReference<Account> get collection {
+    return _collection;
+  }
+
   Stream<Account?> get $account {
     if (_authService.user?.uid != null) {
       return _collection
@@ -37,19 +41,20 @@ class AccountService {
       try {
         var ref = await doc.get();
         // Always returns an AccountSetting model even when the document does not exist
-        if (ref.data()?.isOnboarded == null) {
-          doc.set(Account(isOnboarded: false, team: null));
-        }
+        // if (ref.data()?.isOnboarded == null) {
+        //   doc.set(Account(isOnboarded: false, team: null));
+        // }
       } catch (e, stack) {
         // todo, use provider
         FirebaseCrashlytics.instance.recordError(e, stack);
+        rethrow;
       }
     }
   }
 
   void toggleOnboarding() async {
-    var doc = _collection.doc(_authService.user?.uid);
     try {
+      var doc = _collection.doc(_authService.user?.uid);
       var ref = await doc.get();
       var data = ref.data();
       if (data != null) {
@@ -62,6 +67,22 @@ class AccountService {
     } catch (e, stack) {
       // todo, use provider
       FirebaseCrashlytics.instance.recordError(e, stack);
+      rethrow;
+    }
+  }
+
+  void setTeam(DocumentReference<Map<String, dynamic>> team) async {
+    try {
+      var doc = _collection.doc(_authService.user?.uid);
+      var ref = await doc.get();
+      var data = ref.data();
+      if (data != null) {
+        // doc.set(data.copyWith(team: team));
+      }
+    } catch (e, stack) {
+      // todo, use provider
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      rethrow;
     }
   }
 }

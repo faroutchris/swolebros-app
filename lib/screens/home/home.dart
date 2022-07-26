@@ -24,10 +24,6 @@ class HomeScreen extends HookConsumerWidget {
     Navigator.of(context).pushNamed(AppRoute.addWorkout.value);
   }
 
-  void joinTeam(BuildContext context) {
-    Navigator.of(context).pushNamed(AppRoute.joinTeam.value);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Lang<HomeScreenLangKeys> lang = ref.read(homeScreenLangProvider);
@@ -38,6 +34,11 @@ class HomeScreen extends HookConsumerWidget {
 
     HomeController homeController = ref.read(homeControllerProvider.notifier);
     AsyncValue<HomeState> state = ref.watch(homeControllerProvider);
+
+    void joinTeam(BuildContext context) {
+      teamsService.dummy();
+      // Navigator.of(context).pushNamed(AppRoute.joinTeam.value);
+    }
 
     useEffect(() {
       accountSettingsService.initializeAccount();

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Account {
   final bool? isOnboarded;
-  final DocumentReference<Map<String, dynamic>>? team;
+  final DocumentReference? team;
 
   Account({required this.isOnboarded, this.team});
 
@@ -23,7 +23,7 @@ class Account {
 
   Account copyWith({
     bool? isOnboarded,
-    DocumentReference<Map<String, dynamic>>? team,
+    DocumentReference? team,
   }) {
     return Account(
       isOnboarded: isOnboarded ?? this.isOnboarded,
